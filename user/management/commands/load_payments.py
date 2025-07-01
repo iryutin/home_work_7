@@ -3,6 +3,7 @@ from user.models import Payments
 from django.contrib.auth import get_user_model
 from materials.models import Rate, Lesson
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 User = get_user_model()
 
@@ -10,6 +11,18 @@ class Command(BaseCommand):
     help = 'Creates test users, courses, lessons and payments'
 
     def handle(self, *args, **options):
+        # Создаем группы
+        moderator_group, _ = Group.objects.get_or_create(name="moderators")
+        student_group, _ = Group.objects.get_or_create(name="students")
+
+        #Создаём админа
+        admin_user = User.objects.create_superuser(
+            email="admin@example.com",
+            password="admin123",
+            first_name="Admin",
+            last_name="User",
+        )
+
         # Создаем тестовых пользователей
         user1, created = User.objects.get_or_create(
             email='user1@example.com',
@@ -21,6 +34,8 @@ class Command(BaseCommand):
         if created:
             user1.set_password('password123')
             user1.save()
+
+        user1.groups.add(student_group)
 
         user2, created = User.objects.get_or_create(
             email='user2@example.com',

@@ -1,9 +1,13 @@
 from django.db import models
 
+from django.contrib.auth import get_user_model
+
+
 class Rate (models.Model):
     name = models.CharField(max_length=150, verbose_name="Имя_курса")
     image = models.ImageField(blank=True, null=True, upload_to='rate')
     description = models.TextField(blank=True, null=True)
+    owner = models.OneToOneField(get_user_model(), on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = "Курс"
@@ -15,6 +19,7 @@ class Lesson(models.Model):
     description = models.TextField(blank=True, null=True)
     video = models.FileField(blank=True, null=True, upload_to='lesson/video')
     rate = models.ForeignKey(Rate, on_delete=models.CASCADE)
+    owner = models.OneToOneField(get_user_model(),on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = "Урок"
