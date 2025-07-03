@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -31,13 +32,22 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
     username = None
 
-    email = models.EmailField(unique=True, verbose_name='Почта', help_text='Укажи почту')
-    phone = models.CharField(max_length=12, blank=True, null=True, verbose_name='Телефон', help_text='Укажи телефон')
+    email = models.EmailField(
+        unique=True, verbose_name="Почта", help_text="Укажи почту"
+    )
+    phone = models.CharField(
+        max_length=12,
+        blank=True,
+        null=True,
+        verbose_name="Телефон",
+        help_text="Укажи телефон",
+    )
     city = models.CharField()
-    avatar = models.ImageField(blank=True, null=True, upload_to='user/avatars')
+    avatar = models.ImageField(blank=True, null=True, upload_to="user/avatars")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -45,18 +55,22 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "пользователь"
 
+
 class Payments(models.Model):
+    '''Чеки об оплате'''
     PAYMENT_METHODS = [
-        ('cash', 'Наличные'),
-        ('transfer', 'Перевод на счет'),
+        ("cash", "Наличные"),
+        ("transfer", "Перевод на счет"),
     ]
-    user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     payment_date = models.DateTimeField(auto_created=True, auto_now=True)
-    payment_course = models.ForeignKey('materials.Rate', on_delete=models.SET_NULL, null=True)
-    paid_lesson = models.ForeignKey('materials.Lesson', on_delete=models.SET_NULL, null=True)
-    amount = models.DecimalField(max_digits = 50, decimal_places = 50)
+    payment_course = models.ForeignKey(
+        "materials.Rate", on_delete=models.SET_NULL, null=True
+    )
+    paid_lesson = models.ForeignKey(
+        "materials.Lesson", on_delete=models.SET_NULL, null=True
+    )
+    amount = models.DecimalField(max_digits=50, decimal_places=50)
     payment_method = models.CharField(
-        max_length=10,
-        choices=PAYMENT_METHODS,
-        verbose_name='Способ оплаты'
+        max_length=10, choices=PAYMENT_METHODS, verbose_name="Способ оплаты"
     )
