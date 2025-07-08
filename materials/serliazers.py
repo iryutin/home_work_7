@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from materials.models import Rate, Lesson
-
+from materials.validators import youtubefiltr
 
 class RateSerializer(serializers.ModelSerializer):
     lesson_namber = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Rate
@@ -19,9 +20,17 @@ class RateSerializer(serializers.ModelSerializer):
             return len(instance.lesson_set.all())
         return 0
 
+    def get_is_subscribed(self, obj):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            return obj.subscriptions.filter(user=request.user).exists()
+        return False
+
 
 class LessonSerializer(serializers.ModelSerializer):
 
+    video = serializers.TextField(validators=[youtubefiltr()])
+    read_only_fields = ["owner"]
     class Meta:
         model = Lesson
         fields = "__all__"
