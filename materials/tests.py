@@ -3,7 +3,8 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .models import Rate, Lesson
+
+from .models import Lesson, Rate
 
 User = get_user_model()
 
@@ -135,6 +136,7 @@ class CourseCRUDTestCase(APITestCase):
         url = reverse("course-detail", args=[self.course.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class VideoURLValidatorTestCase(APITestCase):
     def setUp(self):

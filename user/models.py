@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.contrib.auth import get_user_model
 
 
 class UserManager(BaseUserManager):
@@ -57,7 +57,8 @@ class User(AbstractUser):
 
 
 class Payments(models.Model):
-    '''Чеки об оплате'''
+    """Чеки об оплате"""
+
     PAYMENT_METHODS = [
         ("cash", "Наличные"),
         ("transfer", "Перевод на счет"),
@@ -74,6 +75,7 @@ class Payments(models.Model):
     payment_method = models.CharField(
         max_length=10, choices=PAYMENT_METHODS, verbose_name="Способ оплаты"
     )
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(

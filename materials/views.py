@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from rest_framework import viewsets, generics
-from materials.serliazers import RateSerializer, LessonSerializer
-from materials.models import Rate, Lesson
+from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsOwnerOrModerator, IsOwner
 
+from materials.models import Lesson, Rate
+from materials.serliazers import LessonSerializer, RateSerializer
+
+from .permissions import IsOwner, IsOwnerOrModerator
 
 
 class RateViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,7 @@ class RateViewSet(viewsets.ModelViewSet):
     - PUT/PATCH: Update a course (owner or moderator only).
     - DELETE: Delete a course (owner only).
     """
+
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
 
@@ -37,6 +39,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
     """
     Create a new lesson. Only authenticated users can create lessons. The owner is set to the current user.
     """
+
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated]
 
@@ -50,6 +53,7 @@ class LessonListAPIView(generics.ListAPIView):
     """
     List all lessons. Only authenticated users who are owners or moderators can view lessons.
     """
+
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
     queryset = Lesson.objects.all()
@@ -59,6 +63,7 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
     """
     Retrieve a specific lesson by ID. Only owners or moderators can retrieve lessons.
     """
+
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
     queryset = Lesson.objects.all()
@@ -68,6 +73,7 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     """
     Update a lesson by ID. Only owners or moderators can update lessons.
     """
+
     serializer_class = LessonSerializer
     permission_classes = [IsOwnerOrModerator]
     queryset = Lesson.objects.all()
@@ -77,5 +83,6 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     """
     Delete a lesson by ID. Only the owner can delete lessons.
     """
+
     permission_classes = [IsOwner]
     queryset = Lesson.objects.all()

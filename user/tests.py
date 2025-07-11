@@ -3,8 +3,11 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+
 from materials.models import Rate
-from .models import User, Subscription
+
+from .models import Subscription, User
+
 
 class SubscriptionTestCase(APITestCase):
     def setUp(self):

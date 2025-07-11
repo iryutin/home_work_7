@@ -1,7 +1,8 @@
-from pathlib import Path
 import os
-from dotenv import load_dotenv
 from datetime import timedelta
+from pathlib import Path
+
+from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
@@ -55,10 +56,10 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Course & Lesson API',
-    'DESCRIPTION': 'API documentation for course and lesson management endpoints.',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "Course & Lesson API",
+    "DESCRIPTION": "API documentation for course and lesson management endpoints.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 MIDDLEWARE = [
@@ -155,11 +156,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
 
 CORS_ALLOWED_ORIGINS = [
-    '<http://localhost:8000>',  # Замените на адрес вашего фронтенд-сервера
+    "<http://localhost:8000>",  # Замените на адрес вашего фронтенд-сервера
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com", #  Замените на адрес вашего фронтенд-сервера
+    "https://read-and-write.example.com",  #  Замените на адрес вашего фронтенд-сервера
     # и добавьте адрес бэкенд-сервера
 ]
 
