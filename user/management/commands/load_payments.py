@@ -1,9 +1,10 @@
-from django.core.management.base import BaseCommand
-from user.models import Payments
 from django.contrib.auth import get_user_model
-from materials.models import Rate, Lesson
-from django.utils import timezone
 from django.contrib.auth.models import Group
+from django.core.management.base import BaseCommand
+from django.utils import timezone
+
+from materials.models import Lesson, Rate
+from user.models import Payments
 
 User = get_user_model()
 
