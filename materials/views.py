@@ -34,6 +34,17 @@ class RateViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsOwner]
         return super().get_permissions()
 
+    def perform_update(self, serializer):
+        """
+        Переопределяем метод для отправки уведомлений после обновления курса
+        """
+        from materials.tasks import send_course_update_notification
+        
+        course = serializer.save()
+        # Запускаем асинхронную задачу для отправки уведомлений
+        send_course_update_notification.delay(course.id)
+        return course
+
 
 class LessonCreateAPIView(generics.CreateAPIView):
     """

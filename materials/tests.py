@@ -29,7 +29,7 @@ class CourseCRUDTestCase(APITestCase):
             name="Тестовый урок",
             description="Описание тестового урока",
             video_url="https://www.youtube.com/watch?v=test",
-            course=self.course,
+            rate=self.rate,
             owner=self.user,
         )
 
