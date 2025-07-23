@@ -11,6 +11,7 @@ from user.views import (
     StripeCheckoutSessionAPIView,
     StripeStatusAPIView,
     UserCreateAPIView,
+    SubscriptionView,
 )
 
 app_name = UserConfig.name

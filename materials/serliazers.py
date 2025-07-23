@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from materials.models import Lesson, Rate
-from materials.validators import youtubefiltr
+from materials.validators import YoutubeFiltrValidator
 
 
 class RateSerializer(serializers.ModelSerializer):
@@ -31,7 +31,7 @@ class RateSerializer(serializers.ModelSerializer):
 
 class LessonSerializer(serializers.ModelSerializer):
 
-    video = serializers.TextField(validators=[youtubefiltr()])
+    video = serializers.TextField(validators=[YoutubeFiltrValidator()])
     read_only_fields = ["owner"]
 
     class Meta:
