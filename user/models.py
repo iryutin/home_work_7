@@ -97,7 +97,7 @@ class Subscription(models.Model):
         verbose_name_plural = "Подписки"
         unique_together = [
             "user",
-            "rate",
+            "course",
         ]  # Один пользователь может подписаться на курс только один раз
 
     def __str__(self):

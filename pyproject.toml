@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pythonproject1"
+name = "pythonProject"
 version = "0.1.0"
 description = ""
 authors = ["Ilia Ryutin <iryutin@mail.ru>"]
@@ -21,6 +21,9 @@ django-cors-headers = "^4.7.0"
 stripe = "^12.3.0"
 drf-spectacular = "^0.28.0"
 isort = "^6.0.1"
+celery = "^5.5.3"
+eventlet = "^0.40.1"
+redis = "^6.2.0"
 
 
 [build-system]
