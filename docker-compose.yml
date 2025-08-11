@@ -5,16 +5,21 @@ services:
     build: .
     command: >
         bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    env_file:
-      - .env
-    environment:
-      - DEBUG=True
-      - DATABASE_HOST=db
     volumes:
       - .:/code
       - static_volume:/code/static
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
   db:
     image: postgres
     env_file:
@@ -26,6 +31,43 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+
+  celery:
+    build: .
+    command: >
+      bash -c "celery -A config worker --loglevel=INFO"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  celery-beat:
+    build: .
+    command: >
+      bash -c "celery -A config beat --loglevel=INFO"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   postgres_data:
