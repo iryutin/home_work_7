@@ -44,7 +44,7 @@ jobs:
         run: python manage.py test
 
   build:
-    need: test
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
