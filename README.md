@@ -52,3 +52,74 @@ python manage.py runserver
 
 python manage.py createsuperuser
 Перейди по адресу /admin и добавь пользователей в группу Moderators.
+
+
+### 🚀 Запуск через Docker Compose
+
+- **Требования**: установлен Docker Desktop и Docker Compose v2 (Windows/macOS/Linux).
+- **Сервисы**: `web` (Django), `db` (PostgreSQL), `redis`, `celery`, `celery-beat`.
+
+1) Создай файл `.env` в корне проекта (значения можно изменить под себя):
+
+```env
+# Django
+SECRET_KEY=your-secret-key
+DEBUG=True
+
+# Django DB settings (используются приложением)
+NAME=lms_db
+USER=lms_user
+PASSWORD=lms_password
+HOST=db
+PORT=5432
+
+# Postgres container env (используются контейнером db)
+POSTGRES_DB=lms_db
+POSTGRES_USER=lms_user
+POSTGRES_PASSWORD=lms_password
+
+# Email (опционально)
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# Stripe (опционально)
+STRIPE_SECRET_KEY=sk_test_your_key
+```
+
+2) Собери и запусти контейнеры:
+
+```bash
+# Запуск БД и Redis (по желанию отдельно)
+docker compose up -d db redis
+
+# Полный запуск (включая web, celery, celery-beat)
+docker compose up --build web celery celery-beat
+# либо фоном
+# docker compose up --build -d
+```
+
+3) Применить миграции (если не применились автоматически в `web`):
+
+```bash
+docker compose exec web python manage.py migrate
+```
+
+4) Создать суперпользователя:
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+5) Полезные URL:
+- Админка: `http://localhost:8000/admin/`
+- Swagger UI: `http://localhost:8000/swagger/`
+- Redoc: `http://localhost:8000/redoc/`
+
+6) Остановка и удаление контейнеров/томов:
+
+```bash
+# Остановить контейнеры
+docker compose down
+# Полностью очистить с томами
+docker compose down -v
+```
