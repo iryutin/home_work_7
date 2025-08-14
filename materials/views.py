@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -39,7 +38,7 @@ class RateViewSet(viewsets.ModelViewSet):
         Переопределяем метод для отправки уведомлений после обновления курса
         """
         from materials.tasks import send_course_update_notification
-        
+
         course = serializer.save()
         # Запускаем асинхронную задачу для отправки уведомлений
         send_course_update_notification.delay(course.id)

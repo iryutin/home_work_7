@@ -9,7 +9,9 @@ class Rate(models.Model):
     owner = models.OneToOneField(
         get_user_model(), on_delete=models.SET_NULL, null=True, blank=True
     )
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Время последнего обновления")
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Время последнего обновления"
+    )
 
     class Meta:
         verbose_name = "Курс"

@@ -18,12 +18,15 @@ class Command(BaseCommand):
         student_group, _ = Group.objects.get_or_create(name="students")
 
         # Создаём админа
-        admin_user = User.objects.create_superuser(
+        admin_user, created = User.objects.create_superuser(
             email="admin@example.com",
             password="admin123",
             first_name="Admin",
             last_name="User",
         )
+        if created:
+            admin_user.set_password("password123")
+            admin_user.save()
 
         # Создаем тестовых пользователей
         user1, created = User.objects.get_or_create(
