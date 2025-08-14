@@ -16,7 +16,7 @@ jobs:
 
       - name: Install flake8
         run: |
-          (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+          pip install poetry
           poetry add flake8
 
       - name: Run flake8
@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+          pip install poetry
           poetry install
 
       - name: Run tests
