@@ -20,8 +20,7 @@ jobs:
           poetry add flake8
 
       - name: Run flake8
-        run: |
-          flake8 .
+        run: poetry run flake8 .
 
   test:
     needs: lint
