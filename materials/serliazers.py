@@ -31,7 +31,7 @@ class RateSerializer(serializers.ModelSerializer):
 
 class LessonSerializer(serializers.ModelSerializer):
 
-    video = serializers.TextField(validators=[YoutubeFiltrValidator()])
+    video = serializers.DictField(validators=[YoutubeFiltrValidator()])
     read_only_fields = ["owner"]
 
     class Meta:
