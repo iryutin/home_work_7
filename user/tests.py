@@ -11,7 +11,7 @@ class SubscriptionTestCase(APITestCase):
     def setUp(self):
         # Создаем тестового пользователя
         self.user = CustomUser.objects.create_user(
-            email="test@example.com", password="testpass123"
+            "test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
 

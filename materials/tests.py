@@ -10,7 +10,7 @@ class CourseCRUDTestCase(APITestCase):
     def setUp(self):
         # Создаем тестового пользователя
         self.user = CustomUser.objects.create_user(
-            email="test@example.com", password="testpass123"
+            "test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
 
@@ -127,7 +127,7 @@ class CourseCRUDTestCase(APITestCase):
     def test_foreign_user_access(self):
         """Тест доступа другого пользователя к чужим курсам"""
         other_user = CustomUser.objects.create_user(
-            email="other@example.com", password="otherpass123"
+            "other@example.com", password="otherpass123"
         )
         self.client.force_authenticate(user=other_user)
         url = reverse("course-detail", args=[self.course.id])
@@ -138,7 +138,7 @@ class CourseCRUDTestCase(APITestCase):
 class VideoURLValidatorTestCase(APITestCase):
     def setUp(self):
         self.user = CustomUser.objects.create_user(
-            email="test@example.com", password="testpass123"
+            "test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
 
