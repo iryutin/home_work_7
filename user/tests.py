@@ -4,13 +4,13 @@ from rest_framework.test import APITestCase
 
 from materials.models import Rate
 
-from .models import Subscription, User
+from .models import Subscription, CustomUser
 
 
 class SubscriptionTestCase(APITestCase):
     def setUp(self):
         # Создаем тестового пользователя
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create_user(
             email="test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)

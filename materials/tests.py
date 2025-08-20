@@ -1,17 +1,15 @@
-from django.contrib.auth import get_user_model
+from user.models import CustomUser
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .models import Lesson, Rate
 
-User = get_user_model()
-
 
 class CourseCRUDTestCase(APITestCase):
     def setUp(self):
         # Создаем тестового пользователя
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create_user(
             email="test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
@@ -128,7 +126,7 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_foreign_user_access(self):
         """Тест доступа другого пользователя к чужим курсам"""
-        other_user = User.objects.create_user(
+        other_user = CustomUser.objects.create_user(
             email="other@example.com", password="otherpass123"
         )
         self.client.force_authenticate(user=other_user)
@@ -139,7 +137,7 @@ class CourseCRUDTestCase(APITestCase):
 
 class VideoURLValidatorTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create_user(
             email="test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
