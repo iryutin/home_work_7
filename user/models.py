@@ -33,8 +33,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser):
-    username = None
+class CustomUser(AbstractUser):
 
     email = models.EmailField(
         unique=True, verbose_name="Почта", help_text="Укажи почту"
@@ -51,6 +50,7 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
 
     class Meta:
         verbose_name = "пользователь"
@@ -79,7 +79,7 @@ class Payments(models.Model):
 
 class Subscription(models.Model):
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name="subscriptions",
         verbose_name="Пользователь",
