@@ -15,7 +15,7 @@ class CourseCRUDTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         # Создаем тестовый курс
-        self.rate = Rate.objects.create(
+        self.course = Rate.objects.create(
             name="Тестовый курс",
             description="Описание тестового курса",
             owner=self.user,
@@ -26,7 +26,7 @@ class CourseCRUDTestCase(APITestCase):
             name="Тестовый урок",
             description="Описание тестового урока",
             video_url="https://www.youtube.com/watch?v=test",
-            rate=self.rate,
+            rate=self.course,
             owner=self.user,
         )
 
