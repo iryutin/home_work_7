@@ -14,11 +14,12 @@ from materials.views import (
 app_name = MaterialsConfig.name
 
 router = DefaultRouter()
-router.register(r"rate", RateViewSet, basename="rate")
+router.register(r"courses", RateViewSet, basename="course")  # исправлено на courses
+
 urlpatterns = [
-    path("create/", LessonCreateAPIView.as_view(), name="lesson_create"),
-    path("view/", LessonListAPIView.as_view(), name="lesson_view"),
-    path("view/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson_get"),
-    path("view/update/<int:pk>/", LessonUpdateAPIView.as_view(), name="lesson_update"),
-    path("view/delite/<int:pk>/", LessonDestroyAPIView.as_view(), name="lesson_delite"),
+    path("create/", LessonCreateAPIView.as_view(), name="lesson-create"),
+    path("view/", LessonListAPIView.as_view(), name="lesson-list"),
+    path("view/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson-detail"),
+    path("view/update/<int:pk>/", LessonUpdateAPIView.as_view(), name="lesson-update"),
+    path("view/delete/<int:pk>/", LessonDestroyAPIView.as_view(), name="lesson-delete"),
 ] + router.urls

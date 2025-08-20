@@ -14,8 +14,8 @@ class Rate(models.Model):
     )
 
     class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
+        verbose_name = "course"
+        verbose_name_plural = "courses"
 
 
 class Lesson(models.Model):
