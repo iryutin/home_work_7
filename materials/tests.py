@@ -25,7 +25,7 @@ class CourseCRUDTestCase(APITestCase):
         self.lesson = Lesson.objects.create(
             name="Тестовый урок",
             description="Описание тестового урока",
-            video_url="https://www.youtube.com/watch?v=test",
+            video="https://www.youtube.com/watch?v=test",
             rate=self.course,
             owner=self.user,
         )
@@ -75,7 +75,7 @@ class CourseCRUDTestCase(APITestCase):
         data = {
             "name": "Новый урок",
             "description": "Описание нового урока",
-            "video_url": "https://www.youtube.com/watch?v=new",
+            "video": "https://www.youtube.com/watch?v=new",
             "course": self.course.id,
         }
         response = self.client.post(url, data)
@@ -102,7 +102,7 @@ class CourseCRUDTestCase(APITestCase):
         data = {
             "name": "Обновленный урок",
             "description": "Обновленное описание урока",
-            "video_url": "https://www.youtube.com/watch?v=updated",
+            "video": "https://www.youtube.com/watch?v=updated",
             "course": self.course.id,
         }
         response = self.client.put(url, data)
@@ -154,7 +154,7 @@ class VideoURLValidatorTestCase(APITestCase):
         data = {
             "name": "Урок с YouTube",
             "description": "Описание урока",
-            "video_url": "https://www.youtube.com/watch?v=valid",
+            "video": "https://www.youtube.com/watch?v=valid",
             "course": self.course.id,
         }
         response = self.client.post(url, data)
@@ -166,7 +166,7 @@ class VideoURLValidatorTestCase(APITestCase):
         data = {
             "name": "Урок с внешней ссылкой",
             "description": "Описание урока",
-            "video_url": "https://example.com/video",
+            "video": "https://example.com/video",
             "course": self.course.id,
         }
         response = self.client.post(url, data)
@@ -179,7 +179,7 @@ class VideoURLValidatorTestCase(APITestCase):
         data = {
             "name": "Урок с образовательной платформы",
             "description": "Описание урока",
-            "video_url": "https://coursera.org/lesson",
+            "video": "https://coursera.org/lesson",
             "course": self.course.id,
         }
         response = self.client.post(url, data)
