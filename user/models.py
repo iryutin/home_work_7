@@ -46,7 +46,7 @@ class User(AbstractUser):
         verbose_name="Телефон",
         help_text="Укажи телефон",
     )
-    city = models.CharField()
+    city = models.CharField(default='Unknown')
     avatar = models.ImageField(blank=True, null=True, upload_to="user/avatars")
 
     USERNAME_FIELD = "email"
