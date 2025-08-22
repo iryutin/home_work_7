@@ -32,7 +32,7 @@ class CourseCRUDTestCase(APITestCase):
     def test_create_course(self):
         """Тест создания курса"""
         url = "/api/courses/"
-        data = {"name": "Новый курс", "description": "Описание нового курса"}
+        data = {"name": "Новый курс", "description": "Описание нового курса", "owner": self.user}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Rate.objects.count(), 2)
@@ -40,7 +40,7 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_list_courses(self):
         """Тест получения списка курсов"""
-        url = "/api/courses/"
+        reverse('materials:course-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)

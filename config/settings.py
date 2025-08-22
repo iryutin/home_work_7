@@ -2,7 +2,7 @@ import os
 import sys
 from datetime import timedelta
 from pathlib import Path
-from celery.schedules import crontab
+from celery_app.schedules import crontab
 from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
 
