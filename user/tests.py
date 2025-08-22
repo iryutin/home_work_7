@@ -11,7 +11,7 @@ class SubscriptionTestCase(APITestCase):
     def setUp(self):
         # Создаем тестового пользователя
         self.user = CustomUser.objects.create_user(
-            "test@example.com", password="testpass123"
+           "ss" "test@example.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
 
@@ -24,7 +24,7 @@ class SubscriptionTestCase(APITestCase):
 
     def test_create_subscription(self):
         """Тест создания подписки"""
-        url = reverse("subscription")
+        url = reverse("user:subscription")
         data = {"course_id": self.course.id}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -38,7 +38,7 @@ class SubscriptionTestCase(APITestCase):
         # Сначала создаем подписку
         Subscription.objects.create(user=self.user, course=self.course)
 
-        url = reverse("subscription")
+        url = reverse("user:subscription")
         data = {"course_id": self.course.id}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -52,14 +52,14 @@ class SubscriptionTestCase(APITestCase):
         # Создаем подписку
         Subscription.objects.create(user=self.user, course=self.course)
 
-        url = reverse("course-detail", args=[self.course.id])
+        url = reverse("materials:course-detail", args=[self.course.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["is_subscribed"])
 
     def test_no_subscription_status_in_course(self):
         """Тест отображения отсутствия подписки в курсе"""
-        url = reverse("course-detail", args=[self.course.id])
+        url = reverse("materials:course-detail", args=[self.course.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data["is_subscribed"])
@@ -67,7 +67,7 @@ class SubscriptionTestCase(APITestCase):
     def test_subscription_unauthorized(self):
         """Тест подписки без авторизации"""
         self.client.force_authenticate(user=None)
-        url = reverse("subscription")
+        url = reverse("user:subscription")
         data = {"course_id": self.course.id}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

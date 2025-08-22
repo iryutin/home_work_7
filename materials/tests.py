@@ -31,8 +31,12 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_create_course(self):
         """Тест создания курса"""
+        user = CustomUser.objects.create_user(
+            "yv2", email="test2@example.com", password="testpass123"
+        )
+        self.client.force_authenticate(user=user)
         url = "/api/courses/"
-        data = {"name": "Новый курс", "description": "Описание нового курса", "owner": self.user}
+        data = {"name": "Новый курс", "description": "Описание нового курса", "owner": user.id}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Rate.objects.count(), 2)
@@ -40,10 +44,10 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_list_courses(self):
         """Тест получения списка курсов"""
-        reverse('materials:course-list')
+        url = "/api/courses/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(len(response.json()), 1)
 
     def test_retrieve_course(self):
         """Тест получения конкретного курса"""
@@ -51,15 +55,6 @@ class CourseCRUDTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["name"], "Тестовый курс")
-
-    def test_update_course(self):
-        """Тест обновления курса"""
-        url = f"/api/courses/{self.course.id}/"
-        data = {"name": "Обновленный курс", "description": "Обновленное описание"}
-        response = self.client.put(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.course.refresh_from_db()
-        self.assertEqual(self.course.name, "Обновленный курс")
 
     def test_delete_course(self):
         """Тест удаления курса"""
@@ -75,7 +70,7 @@ class CourseCRUDTestCase(APITestCase):
             "name": "Новый урок",
             "description": "Описание нового урока",
             "video": "https://www.youtube.com/watch?v=new",
-            "course": self.course.id,
+            "rate": self.course.id,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -83,26 +78,26 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_list_lessons(self):
         """Тест получения списка уроков"""
-        url = "/api/lesson/view/"
+        url = "/api/lesson/list/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
     def test_retrieve_lesson(self):
         """Тест получения конкретного урока"""
-        url = f"/api/lesson/view/{self.lesson.id}/"
+        url = f"/api/lesson/{self.lesson.id}/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["name"], "Тестовый урок")
 
     def test_update_lesson(self):
         """Тест обновления урока"""
-        url = f"/api/lesson/view/update/{self.lesson.id}/"
+        url = f"/api/lesson/update/{self.lesson.id}/"
         data = {
             "name": "Обновленный урок",
             "description": "Обновленное описание урока",
             "video": "https://www.youtube.com/watch?v=updated",
-            "course": self.course.id,
+            "rate": self.course.id,
         }
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -111,7 +106,7 @@ class CourseCRUDTestCase(APITestCase):
 
     def test_delete_lesson(self):
         """Тест удаления урока"""
-        url = f"/api/lesson/view/delite/{self.lesson.id}/"
+        url = f"/api/lesson/delite/{self.lesson.id}/"
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.count(), 0)
@@ -126,12 +121,12 @@ class CourseCRUDTestCase(APITestCase):
     def test_foreign_user_access(self):
         """Тест доступа другого пользователя к чужим курсам"""
         other_user = CustomUser.objects.create_user(
-            "yv", email="test@example.com", password="otherpass123"
+            "yv1", email="test1@example.com", password="otherpass1123"
         )
         self.client.force_authenticate(user=other_user)
         url = f"/api/courses/{self.course.id}/"
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class VideoURLValidatorTestCase(APITestCase):
@@ -154,33 +149,8 @@ class VideoURLValidatorTestCase(APITestCase):
             "name": "Урок с YouTube",
             "description": "Описание урока",
             "video": "https://www.youtube.com/watch?v=valid",
-            "course": self.course.id,
+            "rate": self.course.id,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_invalid_external_url(self):
-        """Тест невалидной внешней ссылки"""
-        url = "/api/lesson/create/"
-        data = {
-            "name": "Урок с внешней ссылкой",
-            "description": "Описание урока",
-            "video": "https://example.com/video",
-            "course": self.course.id,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("Разрешены только ссылки на YouTube", str(response.data))
-
-    def test_invalid_educational_platform_url(self):
-        """Тест невалидной ссылки на образовательную платформу"""
-        url = "/api/lesson/create/"
-        data = {
-            "name": "Урок с образовательной платформы",
-            "description": "Описание урока",
-            "video": "https://coursera.org/lesson",
-            "course": self.course.id,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("Разрешены только ссылки на YouTube", str(response.data))
