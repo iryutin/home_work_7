@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from user.models import CustomUser
 from django.db import models
 
 
@@ -7,13 +7,15 @@ class Rate(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to="rate")
     description = models.CharField(blank=True, null=True)
     owner = models.OneToOneField(
-        get_user_model(), on_delete=models.SET_NULL, null=True, blank=True
+        CustomUser, on_delete=models.SET_NULL, null=True, blank=True
     )
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Время последнего обновления")
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Время последнего обновления"
+    )
 
     class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
+        verbose_name = "course"
+        verbose_name_plural = "courses"
 
 
 class Lesson(models.Model):
@@ -22,8 +24,8 @@ class Lesson(models.Model):
     description = models.CharField(blank=True, null=True)
     video = models.CharField(blank=True, null=True)
     rate = models.ForeignKey(Rate, on_delete=models.CASCADE)
-    owner = models.OneToOneField(
-        get_user_model(), on_delete=models.SET_NULL, null=True, blank=True
+    owner = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, null=True, blank=True
     )
 
     class Meta:

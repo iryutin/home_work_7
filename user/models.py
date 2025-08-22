@@ -33,8 +33,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser):
-    username = None
+class CustomUser(AbstractUser):
 
     email = models.EmailField(
         unique=True, verbose_name="Почта", help_text="Укажи почту"
@@ -46,7 +45,7 @@ class User(AbstractUser):
         verbose_name="Телефон",
         help_text="Укажи телефон",
     )
-    city = models.CharField()
+    city = models.CharField(default='Unknown')
     avatar = models.ImageField(blank=True, null=True, upload_to="user/avatars")
 
     USERNAME_FIELD = "email"
@@ -79,7 +78,7 @@ class Payments(models.Model):
 
 class Subscription(models.Model):
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name="subscriptions",
         verbose_name="Пользователь",

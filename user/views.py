@@ -1,6 +1,6 @@
 import stripe
 from django.conf import settings
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.generics import CreateAPIView
@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from materials.models import Rate
-from user.models import Payments, Subscription, User
+from user.models import Payments, Subscription, CustomUser
 from user.serliazers import PaymentsSerializer, UserSerializer
 
 
@@ -27,7 +27,7 @@ class PaymentsListAPIView(generics.ListAPIView):
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all
+    queryset = CustomUser.objects.all
     permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
