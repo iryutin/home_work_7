@@ -71,6 +71,24 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
+      - name: Debug step by step
+        run: |
+          # 1. Test connection
+          echo "=== Testing connection ==="
+          ssh -o BatchMode=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "Connection OK" || echo "Connection failed"
+
+          # 2. Test directory
+          echo "=== Testing directory ==="
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /app && echo 'Directory exists'" || echo "Directory missing"
+
+          # 3. Test git
+          echo "=== Testing git ==="
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /app && git status" || echo "Git failed"
+
+          # 4. Test docker
+          echo "=== Testing docker ==="
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker ps" || echo "Docker failed"
+
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
